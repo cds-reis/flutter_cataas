@@ -1,7 +1,7 @@
 import 'package:anyhow/base.dart';
 
 import '../entities/cat.dart';
-import '../failures/api_call_failure.dart';
+import '../failures/app_failure.dart';
 import '../value_objects/cat_amount.dart';
 import '../value_objects/cat_request.dart';
 import '../value_objects/cat_tag.dart';

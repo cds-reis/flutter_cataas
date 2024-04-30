@@ -1,13 +1,13 @@
 import 'package:anyhow/base.dart';
 
-import '../entities/cached_cat_amount.dart';
-import '../failures/api_call_failure.dart';
+import '../../data/dtos/cached_cat_amount.dart';
+import '../failures/app_failure.dart';
 import '../repositories/local_repository.dart';
 import '../repositories/remote_repository.dart';
 import '../value_objects/cat_amount.dart';
 
-class GetCatAmount {
-  const GetCatAmount({
+class GetCatAmountUseCase {
+  const GetCatAmountUseCase({
     required LocalRepository localRepository,
     required RemoteRepository remoteRepository,
   })  : _localRepository = localRepository,
@@ -37,7 +37,7 @@ class GetCatAmount {
         final cache = await _getLocalCatAmount()[$];
         final isCacheExpired = now.difference(cache.cachedTime).inDays > 1;
         if (isCacheExpired) {
-          return const Err(CacheFailure());
+          return const Err(ExpiredCacheFailure());
         }
 
         return Ok(cache.amount);

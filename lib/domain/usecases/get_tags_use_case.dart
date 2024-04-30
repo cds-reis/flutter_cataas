@@ -1,13 +1,13 @@
 import 'package:anyhow/base.dart';
 
-import '../entities/cached_cat_tags.dart';
-import '../failures/api_call_failure.dart';
+import '../../data/dtos/cached_cat_tags.dart';
+import '../failures/app_failure.dart';
 import '../repositories/local_repository.dart';
 import '../repositories/remote_repository.dart';
 import '../value_objects/cat_tag.dart';
 
-class GetTags {
-  const GetTags({
+class GetTagsUseCase {
+  const GetTagsUseCase({
     required LocalRepository localRepository,
     required RemoteRepository remoteRepository,
   })  : _localRepository = localRepository,
@@ -16,19 +16,18 @@ class GetTags {
   final LocalRepository _localRepository;
   final RemoteRepository _remoteRepository;
 
-  FutureResult<Iterable<CatTag>, AppFailure> call(DateTime now) async =>
-      Result.async(
-        ($) async {
-          final tags = await _getTags(now)[$];
+  FutureResult<Iterable<CatTag>, AppFailure> call(DateTime now) async {
+    return _getTagsFromCache(now).orElse((_) => _getRemoteTags());
+  }
 
-          await _localRepository.updateCatTags(tags);
+  FutureResult<Iterable<CatTag>, AppFailure> _getRemoteTags() async {
+    final tags = await _remoteRepository.getTags();
 
-          return Ok(tags);
-        },
-      );
+    if (tags case Ok(ok: final tags)) {
+      await _localRepository.updateCatTags(tags);
+    }
 
-  FutureResult<Iterable<CatTag>, AppFailure> _getTags(DateTime now) {
-    return _getTagsFromCache(now).orElse((_) => _remoteRepository.getTags());
+    return tags;
   }
 
   FutureResult<Iterable<CatTag>, AppFailure> _getTagsFromCache(DateTime now) {
@@ -37,7 +36,7 @@ class GetTags {
         final cache = await _getLocalTags()[$];
         final isCacheExpired = now.difference(cache.cachedTime).inDays > 1;
         if (isCacheExpired) {
-          return const Err(CacheFailure());
+          return const Err(ExpiredCacheFailure());
         }
 
         return Ok(cache.tags.iter());

@@ -7,6 +7,18 @@ final class NonEmptyList<T> extends Equatable {
 
   const NonEmptyList._({required this.head, required List<T> tail})
       : _tail = tail;
+
+  static NonEmptyList<T>? fromIterable<T>(Iterable<T> iterable) {
+    if (iterable.isEmpty) {
+      return null;
+    }
+
+    return NonEmptyList._(
+      head: iterable.first,
+      tail: iterable.skip(1).toList(),
+    );
+  }
+
   final T head;
   final List<T> _tail;
 

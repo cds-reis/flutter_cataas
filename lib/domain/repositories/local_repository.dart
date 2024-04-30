@@ -1,8 +1,8 @@
 import 'package:anyhow/base.dart';
 
-import '../entities/cached_cat_amount.dart';
-import '../entities/cached_cat_tags.dart';
-import '../failures/api_call_failure.dart';
+import '../../data/dtos/cached_cat_amount.dart';
+import '../../data/dtos/cached_cat_tags.dart';
+import '../failures/app_failure.dart';
 import '../value_objects/cat_amount.dart';
 import '../value_objects/cat_tag.dart';
 

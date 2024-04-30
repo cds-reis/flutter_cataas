@@ -1,7 +1,7 @@
 import 'package:anyhow/base.dart';
 
 import '../entities/cat.dart';
-import '../failures/api_call_failure.dart';
+import '../failures/app_failure.dart';
 import '../repositories/remote_repository.dart';
 import '../value_objects/cat_request.dart';
 
