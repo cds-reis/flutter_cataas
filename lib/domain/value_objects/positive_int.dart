@@ -1,4 +1,7 @@
+import 'package:anyhow/base.dart';
 import 'package:flutter/material.dart';
+
+import '../failures/app_failure.dart';
 
 @immutable
 final class PositiveInt {
@@ -6,12 +9,13 @@ final class PositiveInt {
 
   final int $1;
 
-  static PositiveInt? tryParse(int value) {
-    if (value <= 0) {
-      return null;
-    }
-
-    return PositiveInt._(value);
+  static Result<PositiveInt, ParseFailure<PositiveIntParseFailure>> tryParse(
+    int value,
+  ) {
+    return switch (value) {
+      > 0 => Ok(PositiveInt._(value)),
+      _ => Err(ParseFailure(PositiveIntParseFailure(value))),
+    };
   }
 
   @override
@@ -37,3 +41,5 @@ final class PositiveInt {
     return $1.toString();
   }
 }
+
+extension type PositiveIntParseFailure(int originalValue) {}

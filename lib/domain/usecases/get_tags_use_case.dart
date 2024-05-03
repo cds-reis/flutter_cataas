@@ -6,6 +6,8 @@ import '../repositories/local_repository.dart';
 import '../repositories/remote_repository.dart';
 import '../value_objects/cat_tag.dart';
 
+typedef CatTags = Iterable<CatTag>;
+
 class GetTagsUseCase {
   const GetTagsUseCase({
     required LocalRepository localRepository,
@@ -16,21 +18,20 @@ class GetTagsUseCase {
   final LocalRepository _localRepository;
   final RemoteRepository _remoteRepository;
 
-  FutureResult<Iterable<CatTag>, AppFailure> call(DateTime now) async {
-    return _getTagsFromCache(now).orElse((_) => _getRemoteTags());
-  }
+  FutureResult<CatTags, AppFailure> call(DateTime now) =>
+      _getTagsFromCache(now).orElse(
+        (_) => Result.async(
+          ($) async {
+            final tags = await _remoteRepository.getTags()[$];
 
-  FutureResult<Iterable<CatTag>, AppFailure> _getRemoteTags() async {
-    final tags = await _remoteRepository.getTags();
+            await _localRepository.updateCatTags(tags);
 
-    if (tags case Ok(ok: final tags)) {
-      await _localRepository.updateCatTags(tags);
-    }
+            return Ok(tags);
+          },
+        ),
+      );
 
-    return tags;
-  }
-
-  FutureResult<Iterable<CatTag>, AppFailure> _getTagsFromCache(DateTime now) {
+  FutureResult<CatTags, AppFailure> _getTagsFromCache(DateTime now) {
     return Result.async(
       ($) async {
         final cache = await _getLocalTags()[$];

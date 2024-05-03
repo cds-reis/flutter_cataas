@@ -40,15 +40,15 @@ final class DioRemoteRepository implements RemoteRepository {
   }
 
   Result<CatAmount, AppFailure> _parseCatJson(Map<String, dynamic>? json) {
-    if (json case {'count': final int count}) {
-      final positiveInt = PositiveInt.tryParse(count);
-      return switch (positiveInt) {
-        PositiveInt() => Ok(CatAmount(positiveInt)),
-        null => const Err(ParseFailure()),
-      };
-    }
+    return Result(
+      ($) {
+        if (json case {'count': final int count}) {
+          final positiveInt = PositiveInt.tryParse(count).map(CatAmount.new);
+        }
 
-    return const Err(ParseFailure());
+        return const Err(ParseFailure());
+      },
+    );
   }
 
   @override

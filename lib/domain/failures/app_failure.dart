@@ -14,8 +14,13 @@ final class ApiCallFailure extends AppFailure {
   const ApiCallFailure();
 }
 
-final class ParseFailure extends AppFailure {
-  const ParseFailure();
+final class ParseFailure<T> extends AppFailure {
+  const ParseFailure(this.error);
+
+  final T error;
+
+  @override
+  List<Object?> get props => [error];
 }
 
 final class NoInternetConnectionFailure extends AppFailure {
