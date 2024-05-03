@@ -9,14 +9,13 @@ final class PositiveInt {
 
   final int $1;
 
-  static Result<PositiveInt, ParseFailure<PositiveIntParseFailure>> tryParse(
+  static Result<PositiveInt, ParseFailure> tryParse(
     int value,
-  ) {
-    return switch (value) {
-      > 0 => Ok(PositiveInt._(value)),
-      _ => Err(ParseFailure(PositiveIntParseFailure(value))),
-    };
-  }
+  ) =>
+      switch (value) {
+        > 0 => Ok(PositiveInt._(value)),
+        _ => const Err(ParseFailure()),
+      };
 
   @override
   bool operator ==(Object other) {
@@ -41,5 +40,3 @@ final class PositiveInt {
     return $1.toString();
   }
 }
-
-extension type PositiveIntParseFailure(int originalValue) {}

@@ -1,4 +1,7 @@
+import 'package:anyhow/base.dart';
 import 'package:equatable/equatable.dart';
+
+import '../failures/app_failure.dart';
 
 final class NonEmptyList<T> extends Equatable {
   factory NonEmptyList(T head, [List<T>? tail]) {
@@ -8,14 +11,18 @@ final class NonEmptyList<T> extends Equatable {
   const NonEmptyList._({required this.head, required List<T> tail})
       : _tail = tail;
 
-  static NonEmptyList<T>? fromIterable<T>(Iterable<T> iterable) {
+  static Result<NonEmptyList<T>, ParseFailure> fromIterable<T>(
+    Iterable<T> iterable,
+  ) {
     if (iterable.isEmpty) {
-      return null;
+      return const Err(ParseFailure());
     }
 
-    return NonEmptyList._(
-      head: iterable.first,
-      tail: iterable.skip(1).toList(),
+    return Ok(
+      NonEmptyList._(
+        head: iterable.first,
+        tail: iterable.skip(1).toList(),
+      ),
     );
   }
 

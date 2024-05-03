@@ -10,17 +10,16 @@ sealed class AppFailure extends Equatable {
   List<Object?> get props => [];
 }
 
+final class CatNotFoundFailure extends AppFailure {
+  const CatNotFoundFailure();
+}
+
 final class ApiCallFailure extends AppFailure {
   const ApiCallFailure();
 }
 
-final class ParseFailure<T> extends AppFailure {
-  const ParseFailure(this.error);
-
-  final T error;
-
-  @override
-  List<Object?> get props => [error];
+final class ParseFailure extends AppFailure {
+  const ParseFailure();
 }
 
 final class NoInternetConnectionFailure extends AppFailure {
@@ -33,6 +32,10 @@ sealed class CacheFailure extends AppFailure {
 
 final class EmptyCacheFailure extends CacheFailure {
   const EmptyCacheFailure();
+}
+
+final class InvalidCacheFailure extends CacheFailure {
+  const InvalidCacheFailure();
 }
 
 final class ExpiredCacheFailure extends CacheFailure {

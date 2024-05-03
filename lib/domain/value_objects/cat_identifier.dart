@@ -7,8 +7,8 @@ sealed class CatIdentifier extends Equatable {
   const CatIdentifier();
 }
 
-final class Id extends CatIdentifier {
-  const Id(this.$1);
+final class CatId extends CatIdentifier {
+  const CatId(this.$1);
   final String $1;
 
   @override

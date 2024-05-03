@@ -4,6 +4,7 @@ import 'package:equatable/equatable.dart';
 
 import '../value_objects/cat_filter.dart';
 import '../value_objects/cat_identifier.dart';
+import '../value_objects/cat_tag.dart';
 import '../value_objects/cat_text.dart';
 
 final class Cat extends Equatable {
@@ -16,7 +17,7 @@ final class Cat extends Equatable {
   });
 
   final CatIdentifier id;
-  final Iterable<String> tags;
+  final Iterable<CatTag> tags;
   final Uint8List image;
   final CatText? text;
   final CatFilter? filter;

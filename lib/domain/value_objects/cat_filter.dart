@@ -1,4 +1,8 @@
+import 'dart:ui';
+
 import 'package:equatable/equatable.dart';
+
+import 'positive_int.dart';
 
 sealed class CatFilter extends Equatable {
   const CatFilter();
@@ -6,8 +10,6 @@ sealed class CatFilter extends Equatable {
   @override
   List<Object?> get props => [];
 }
-
-final class Blue extends CatFilter {}
 
 final class Mono extends CatFilter {}
 
@@ -38,12 +40,47 @@ final class Custom extends CatFilter {
       ];
 }
 
-final class Brightness {}
+final class Brightness extends Equatable {
+  const Brightness(this.$1);
 
-final class Lightness {}
+  final PositiveInt $1;
 
-final class Saturation {}
+  @override
+  List<Object?> get props => [$1];
+}
 
-final class Hue {}
+final class Lightness extends Equatable {
+  const Lightness(this.$1);
 
-final class Rgb {}
+  final PositiveInt $1;
+
+  @override
+  List<Object?> get props => [$1];
+}
+
+final class Saturation extends Equatable {
+  const Saturation(this.$1);
+
+  final PositiveInt $1;
+
+  @override
+  List<Object?> get props => [$1];
+}
+
+final class Hue extends Equatable {
+  const Hue(this.$1);
+
+  final double $1;
+
+  @override
+  List<Object?> get props => [$1];
+}
+
+final class Rgb extends Equatable {
+  const Rgb(this.$1);
+
+  final Color $1;
+
+  @override
+  List<Object?> get props => [$1];
+}

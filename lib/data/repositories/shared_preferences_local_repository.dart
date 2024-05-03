@@ -21,63 +21,70 @@ final class SharedPreferencesLocalRepository implements LocalRepository {
   static const String _tagsUpdatedAtKey = 'cat_tags_updated_at';
 
   @override
-  FutureResult<CachedCatAmount, CacheFailure> getCatAmount() => Result.async(
-        ($) async {
-          final amount =
-              await _getFromCache((prefs) => prefs.getInt(_amountKey))
-                  .andThen(_toPositiveInt)
-                  .map(CatAmount.new)[$];
+  FutureResult<CachedCatAmount, CacheFailure> getCatAmount() {
+    return Result.async(
+      ($) async {
+        final cachedAmount =
+            await _getFromCache((prefs) => prefs.getInt(_amountKey))[$];
 
-          final updatedAt = await _getFromCache(
-            (prefs) => prefs.getString(_amountUpdatedAtKey),
-          ).andThen(_toDateTime).map(CachedTime.new)[$];
+        final positive = PositiveInt.tryParse(cachedAmount)
+            .mapErr<CacheFailure>((_) => const InvalidCacheFailure())[$];
 
-          return Ok(
-            CachedCatAmount(
-              amount: amount,
-              cachedTime: updatedAt,
-            ),
-          );
-        },
-      );
+        final amount = CatAmount(positive);
 
-  @override
-  FutureResult<CachedCatTags, CacheFailure> getCatTags() => Result.async(
-        ($) async {
-          final cachedTags =
-              await _getFromCache((prefs) => prefs.getStringList(_tagsKey))[$];
+        final updatedAt = await _getFromCache(
+          (prefs) => prefs.getString(_amountUpdatedAtKey),
+        ).andThen(_toDateTime).map(CachedTime.new)[$];
 
-          final nonEmptyTags =
-              cachedTags.map(NonEmptyString.tryParse).nonNulls.map(CatTag.new);
-          final tags = NonEmptyList.fromIterable(nonEmptyTags);
-          if (tags == null) {
-            return const Err(EmptyCacheFailure());
-          }
-
-          final updatedAt = await _getFromCache(
-            (prefs) => prefs.getString(_tagsUpdatedAtKey),
-          ).andThen(_toDateTime).map(CachedTime.new)[$];
-
-          return Ok(
-            CachedCatTags(
-              tags: tags,
-              cachedTime: updatedAt,
-            ),
-          );
-        },
-      );
+        return Ok(
+          CachedCatAmount(
+            amount: amount,
+            cachedTime: updatedAt,
+          ),
+        );
+      },
+    );
+  }
 
   @override
-  FutureResult<Unit, CacheFailure> updateCatAmount(CatAmount amount) =>
-      Result.async(
-        ($) async {
-          final prefs = await _instance[$];
-          await prefs.setInt(_amountKey, amount.$1);
-          await prefs.setString(_amountUpdatedAtKey, DateTime.now().toString());
+  FutureResult<CachedCatTags, CacheFailure> getCatTags() {
+    return Result.async(
+      ($) async {
+        final cachedTags =
+            await _getFromCache((prefs) => prefs.getStringList(_tagsKey))[$];
 
-          return const Ok(());
-        },
-      );
+        final nonEmptyTags =
+            cachedTags.map(NonEmptyString.tryParse).nonNulls.map(CatTag.new);
+
+        final tags = NonEmptyList.fromIterable(nonEmptyTags)
+            .mapErr<CacheFailure>((_) => const EmptyCacheFailure())[$];
+
+        final updatedAt = await _getFromCache(
+          (prefs) => prefs.getString(_tagsUpdatedAtKey),
+        ).andThen(_toDateTime).map(CachedTime.new)[$];
+
+        return Ok(
+          CachedCatTags(
+            tags: tags,
+            cachedTime: updatedAt,
+          ),
+        );
+      },
+    );
+  }
+
+  @override
+  FutureResult<Unit, CacheFailure> updateCatAmount(CatAmount amount) {
+    return Result.async(
+      ($) async {
+        final prefs = await _instance[$];
+        await prefs.setInt(_amountKey, amount.$1);
+        await prefs.setString(_amountUpdatedAtKey, DateTime.now().toString());
+
+        return const Ok(());
+      },
+    );
+  }
 
   @override
   FutureResult<Unit, CacheFailure> updateCatTags(Iterable<CatTag> tags) {
@@ -102,31 +109,26 @@ final class SharedPreferencesLocalRepository implements LocalRepository {
 
   FutureResult<T, CacheFailure> _getFromCache<T>(
     T? Function(SharedPreferences prefs) get,
-  ) =>
-      Result.async(
-        ($) async {
-          final prefs = await _instance[$];
-          final value = get(prefs);
-          if (value == null) {
-            return const Err(EmptyCacheFailure());
-          }
+  ) {
+    return Result.async(
+      ($) async {
+        final prefs = await _instance[$];
+        final value = get(prefs);
+        if (value == null) {
+          return const Err(EmptyCacheFailure());
+        }
 
-          return Ok(value);
-        },
-      );
-}
-
-Result<T, CacheFailure> _mapIfNull<T>(T? Function() f) {
-  final result = f();
-  if (result == null) {
-    return const Err(EmptyCacheFailure());
+        return Ok(value);
+      },
+    );
   }
-
-  return Ok(result);
 }
 
-Result<PositiveInt, CacheFailure> _toPositiveInt(int amount) =>
-    _mapIfNull(() => PositiveInt.tryParse(amount));
+Result<DateTime, CacheFailure> _toDateTime(String value) {
+  final result = DateTime.tryParse(value);
 
-Result<DateTime, CacheFailure> _toDateTime(String value) =>
-    _mapIfNull(() => DateTime.tryParse(value));
+  return switch (result) {
+    DateTime() => Ok(result),
+    null => const Err(InvalidCacheFailure()),
+  };
+}
