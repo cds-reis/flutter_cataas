@@ -21,6 +21,8 @@ final class DioRemoteRepository implements RemoteRepository {
 
   final Dio _dio;
 
+  static const String _catUrl = 'https://cataas.com/cat';
+
   @override
   FutureResult<Cat, AppFailure> getCat(CatRequest request) {
     return Result.async(($) async {
@@ -46,8 +48,9 @@ final class DioRemoteRepository implements RemoteRepository {
   ) async {
     try {
       final identifierPath = _buildIdentifier(identifier);
+      final path = '$_catUrl$identifierPath';
       final response = await _dio.get<Map<String, dynamic>>(
-        identifierPath,
+        path,
         queryParameters: {'json': true},
       );
 
@@ -64,8 +67,8 @@ final class DioRemoteRepository implements RemoteRepository {
   }
 
   Result<CatIdWithTags, AppFailure> _parseCatJson(Map<String, dynamic>? json) {
-    if (json case {'tags': final List<String> tags, '_id': final String id}) {
-      final catTags = tags.map(CatTag.fromString).nonNulls;
+    if (json case {'tags': final List<dynamic> tags, '_id': final String id}) {
+      final catTags = tags.whereType<String>().map(CatTag.fromString).nonNulls;
 
       final catIdWithTags = CatIdWithTags(id: CatId(id), tags: catTags);
 
@@ -80,11 +83,11 @@ final class DioRemoteRepository implements RemoteRepository {
     required CatRequest request,
   }) async {
     try {
-      final identifier = _buildIdentifier(request.identifier);
+      final identifier = _buildIdentifier(catId);
       final (textComplement, textParams) = _buildText(request.text);
       final filterParams = _buildFilter(request.filter);
 
-      final uri = 'https://cataas.com/cat$identifier$textComplement';
+      final uri = '$_catUrl$identifier$textComplement';
       final result = await _dio.get<Uint8List>(
         uri,
         queryParameters: {
@@ -106,7 +109,7 @@ final class DioRemoteRepository implements RemoteRepository {
   String _buildIdentifier(CatIdentifier identifier) {
     return switch (identifier) {
       CatId($1: final catId) => '/$catId',
-      Tags($1: final tags) => '/${tags.iter().join(',')}',
+      Tags($1: final tags) => '/${tags.iter().map((e) => e.$1).join(',')}',
       NoIdentifier() => '',
     };
   }

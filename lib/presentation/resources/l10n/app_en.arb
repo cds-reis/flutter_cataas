@@ -1,0 +1,19 @@
+{
+    "title": "Cats as a Service",
+    "@title": {
+        "description": "Title of the application"
+    },
+    "giveMeACat": "Give me a cat! 🐱",
+    "@giveMeACat": {
+        "description": "Message for prompting a new cat!"
+    },
+    "helloAgain": "Hello Again!",
+    "@helloAgain": {
+        "description": "Text in the initial cat image.!"
+    },
+    "addTextToCatInputHint": "Make me say something! 😸",
+    "@addTextToCatInputHint" : {
+        "description": "Hint in the cat text input."
+    }
+
+}

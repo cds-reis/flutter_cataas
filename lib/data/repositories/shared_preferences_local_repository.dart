@@ -1,7 +1,6 @@
 import 'package:anyhow/base.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../core/try_catch.dart';
 import '../../domain/failures/app_failure.dart';
 import '../../domain/repositories/local_repository.dart';
 import '../../domain/value_objects/cached_time.dart';
@@ -100,11 +99,12 @@ final class SharedPreferencesLocalRepository implements LocalRepository {
     );
   }
 
-  FutureResult<SharedPreferences, CacheFailure> get _instance {
-    return futureTryCatch(
-      SharedPreferences.getInstance,
-      (e, st) => CacheLoadFailure(error: e, stackTrace: st),
-    );
+  FutureResult<SharedPreferences, CacheFailure> get _instance async {
+    try {
+      return Ok(await SharedPreferences.getInstance());
+    } catch (e, st) {
+      return Err(CacheLoadFailure(error: e, stackTrace: st));
+    }
   }
 
   FutureResult<T, CacheFailure> _getFromCache<T>(

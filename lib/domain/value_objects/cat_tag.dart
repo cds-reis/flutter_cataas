@@ -1,6 +1,11 @@
+import 'package:equatable/equatable.dart';
+
 import 'non_empty_string.dart';
 
-extension type CatTag(NonEmptyString _$1) {
+final class CatTag extends Equatable {
+  const CatTag(this._$1);
+
+  final NonEmptyString _$1;
   static CatTag? fromString(String value) {
     final nes = NonEmptyString.tryParse(value);
 
@@ -13,4 +18,7 @@ extension type CatTag(NonEmptyString _$1) {
 
   String get $1 => _$1.$1;
   NonEmptyString get nonEmpty => _$1;
+
+  @override
+  List<Object?> get props => [_$1];
 }

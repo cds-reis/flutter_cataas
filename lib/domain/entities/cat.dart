@@ -16,7 +16,7 @@ final class Cat extends Equatable {
     required this.filter,
   });
 
-  final CatIdentifier id;
+  final CatId id;
   final Iterable<CatTag> tags;
   final Uint8List image;
   final CatText? text;
