@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
-import '../cubit/main_cat_cubit.dart';
+import '../cubit/main_cat_cubit/main_cat_cubit.dart';
 import 'cat_loader.dart';
 import 'cat_widget.dart';
 

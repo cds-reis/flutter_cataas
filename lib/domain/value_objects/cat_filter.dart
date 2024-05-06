@@ -1,6 +1,5 @@
-import 'dart:ui';
-
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import 'positive_int.dart';
 
@@ -38,6 +37,22 @@ final class Custom extends CatFilter {
         hue,
         rgb,
       ];
+
+  Custom copyWith({
+    ValueGetter<Brightness?>? brightness,
+    ValueGetter<Lightness?>? lightness,
+    ValueGetter<Saturation?>? saturation,
+    ValueGetter<Hue?>? hue,
+    ValueGetter<Rgb?>? rgb,
+  }) {
+    return Custom(
+      brightness: brightness != null ? brightness() : this.brightness,
+      lightness: lightness != null ? lightness() : this.lightness,
+      saturation: saturation != null ? saturation() : this.saturation,
+      hue: hue != null ? hue() : this.hue,
+      rgb: rgb != null ? rgb() : this.rgb,
+    );
+  }
 }
 
 final class Brightness extends Equatable {

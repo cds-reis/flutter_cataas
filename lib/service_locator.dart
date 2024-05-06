@@ -9,7 +9,7 @@ import 'domain/repositories/remote_repository.dart';
 import 'domain/usecases/get_cat_amount_use_case.dart';
 import 'domain/usecases/get_cat_use_case.dart';
 import 'domain/usecases/get_tags_use_case.dart';
-import 'presentation/cubit/main_cat_cubit.dart';
+import 'presentation/cubit/main_cat_cubit/main_cat_cubit.dart';
 
 final sl = _initializeServiceLocator();
 

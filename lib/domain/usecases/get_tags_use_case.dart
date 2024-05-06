@@ -31,7 +31,7 @@ class GetTagsUseCase {
         ),
       );
 
-  FutureResult<CatTags, AppFailure> _getTagsFromCache(DateTime now) {
+  FutureResult<CatTags, CacheFailure> _getTagsFromCache(DateTime now) {
     return Result.async(
       ($) async {
         final cache = await _getLocalTags()[$];

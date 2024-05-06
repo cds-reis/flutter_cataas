@@ -3,14 +3,14 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
-import '../../domain/entities/cat.dart';
-import '../../domain/failures/app_failure.dart';
-import '../../domain/usecases/get_cat_use_case.dart';
-import '../../domain/value_objects/cat_identifier.dart';
-import '../../domain/value_objects/cat_request.dart';
-import '../../domain/value_objects/cat_text.dart';
-import '../../domain/value_objects/non_empty_string.dart';
-import '../extensions/build_context_extensions.dart';
+import '../../../domain/entities/cat.dart';
+import '../../../domain/failures/app_failure.dart';
+import '../../../domain/usecases/get_cat_use_case.dart';
+import '../../../domain/value_objects/cat_identifier.dart';
+import '../../../domain/value_objects/cat_request.dart';
+import '../../../domain/value_objects/cat_text.dart';
+import '../../../domain/value_objects/non_empty_string.dart';
+import '../../extensions/build_context_extensions.dart';
 
 part 'main_cat_state.dart';
 
@@ -36,11 +36,9 @@ class MainCatCubit extends Cubit<MainCatState> {
     );
   }
 
-  Future<void> onNewCatTap() async {
+  Future<void> onNewCatTap(CatRequest catRequest) async {
     emit(const MainCatLoading());
-    final result = await _getCatUseCase(
-      const CatRequest(identifier: NoIdentifier()),
-    );
+    final result = await _getCatUseCase(catRequest);
     emit(
       switch (result) {
         Ok(ok: final cat) => MainCatSucess(cat),

@@ -2,9 +2,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
-import '../cubit/main_cat_cubit.dart';
+import '../cubit/cat_filter_cubit/cat_filter_cubit.dart';
+import '../cubit/main_cat_cubit/main_cat_cubit.dart';
 import '../extensions/build_context_extensions.dart';
 import '../widgets/cat_display_frame.dart';
+import '../widgets/say_something_text_field.dart';
 
 class MainCatPage extends StatelessWidget {
   const MainCatPage({super.key});
@@ -18,15 +20,13 @@ class MainCatPage extends StatelessWidget {
           children: [
             const CatDisplayFrame(),
             const SizedBox(height: 12),
-            NeuSearchBar(
-              hintText: context.l10n.addTextToCatInputHint,
-              leadingIcon: const Icon(Icons.speaker_notes_outlined),
-            ),
+            const SaySomethingTextField(),
             const SizedBox(height: 12),
             NeuTextButton(
               enableAnimation: true,
               onPressed: () {
-                context.read<MainCatCubit>().onNewCatTap();
+                final request = context.read<CatFilterCubit>().state;
+                context.read<MainCatCubit>().onNewCatTap(request);
               },
               text: Text(
                 context.l10n.giveMeACat,

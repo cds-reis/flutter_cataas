@@ -1,4 +1,5 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/material.dart';
 
 import 'non_empty_string.dart';
 import 'positive_int.dart';
@@ -16,6 +17,18 @@ final class CatText extends Equatable {
 
   @override
   List<Object?> get props => [text, fontSize, fontColor];
+
+  CatText copyWith({
+    NonEmptyString? text,
+    ValueGetter<FontSize?>? fontSize,
+    ValueGetter<FontColor?>? fontColor,
+  }) {
+    return CatText(
+      text: text ?? this.text,
+      fontSize: fontSize != null ? fontSize() : this.fontSize,
+      fontColor: fontColor != null ? fontColor() : this.fontColor,
+    );
+  }
 }
 
 final class FontSize extends Equatable {

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
 import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 
-import 'presentation/cubit/home_cubit.dart';
+import 'presentation/cubit/home_cubit/home_cubit.dart';
 import 'presentation/extensions/build_context_extensions.dart';
 import 'presentation/pages/home_page.dart';
 
