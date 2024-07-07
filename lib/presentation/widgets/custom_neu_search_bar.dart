@@ -1,17 +1,22 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
-import '../cubit/cat_filter_cubit/cat_filter_cubit.dart';
-import '../cubit/main_cat_cubit/main_cat_cubit.dart';
-import '../extensions/build_context_extensions.dart';
+class CustomNeuTextField extends StatelessWidget {
+  const CustomNeuTextField({
+    required this.controller,
+    super.key,
+    this.hintText,
+    this.onClear,
+    this.onSubmitted,
+  });
 
-class SaySomethingTextField extends StatelessWidget {
-  const SaySomethingTextField({super.key});
+  final TextEditingController controller;
+  final String? hintText;
+  final VoidCallback? onClear;
+  final VoidCallback? onSubmitted;
 
   @override
   Widget build(BuildContext context) {
-    final cubit = context.read<CatFilterCubit>();
     return NeuContainer(
       color: const Color.fromARGB(255, 214, 140, 164),
       borderRadius: BorderRadius.circular(15),
@@ -22,19 +27,17 @@ class SaySomethingTextField extends StatelessWidget {
           const SizedBox(width: 13),
           Expanded(
             child: TextField(
-              onSubmitted: (_) {
-                context.read<MainCatCubit>().onNewCatTap(cubit.state);
-              },
-              controller: cubit.catTextController,
+              onSubmitted: (_) => onSubmitted?.call(),
+              controller: controller,
               decoration: InputDecoration(
-                hintText: context.l10n.addTextToCatInputHint,
+                hintText: hintText,
                 border: InputBorder.none,
                 focusedBorder: InputBorder.none,
               ),
             ),
           ),
           IconButton(
-            onPressed: cubit.onCatTextClear,
+            onPressed: onClear,
             icon: const Icon(Icons.clear_outlined),
           ),
         ],

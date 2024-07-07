@@ -190,7 +190,19 @@ final class DioRemoteRepository implements RemoteRepository {
   }
 
   @override
-  FutureResult<Iterable<CatTag>, AppFailure> getTags() {
-    throw UnimplementedError();
+  FutureResult<CatTags, AppFailure> getTags() async {
+    try {
+      final response = await _dio.get<List<dynamic>>(
+        'https://cataas.com/api/tags',
+      );
+
+      final data = response.data?.whereType<String>() ?? const Iterable.empty();
+
+      final tags = data.map(CatTag.fromString).nonNulls;
+
+      return Ok(tags);
+    } catch (e) {
+      rethrow;
+    }
   }
 }

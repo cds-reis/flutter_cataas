@@ -1,12 +1,11 @@
 import 'package:anyhow/base.dart';
+import 'package:collection/collection.dart';
 
 import '../../data/dtos/cached_cat_tags.dart';
 import '../failures/app_failure.dart';
 import '../repositories/local_repository.dart';
 import '../repositories/remote_repository.dart';
 import '../value_objects/cat_tag.dart';
-
-typedef CatTags = Iterable<CatTag>;
 
 class GetTagsUseCase {
   const GetTagsUseCase({
@@ -24,9 +23,14 @@ class GetTagsUseCase {
           ($) async {
             final tags = await _remoteRepository.getTags()[$];
 
-            await _localRepository.updateCatTags(tags);
+            final filtered = tags
+                .map((tag) => tag.toLowerCase())
+                .toSet()
+                .sorted((a, b) => a.$1.compareTo(b.$1));
 
-            return Ok(tags);
+            await _localRepository.updateCatTags(filtered);
+
+            return Ok(filtered);
           },
         ),
       );

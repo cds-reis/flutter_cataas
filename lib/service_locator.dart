@@ -1,5 +1,6 @@
 import 'package:dio/dio.dart';
 import 'package:get_it/get_it.dart';
+import 'package:talker/talker.dart';
 
 import 'data/interceptors/logger_interceptor.dart';
 import 'data/repositories/dio_remote_repository.dart';
@@ -17,6 +18,8 @@ GetIt _initializeServiceLocator() {
   final i = GetIt.I;
 
   i
+    // Talker
+    ..registerSingleton<Talker>(Talker())
 
     // Repositories
     ..registerLazySingleton<LocalRepository>(

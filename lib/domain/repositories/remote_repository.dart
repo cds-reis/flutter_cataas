@@ -8,6 +8,6 @@ import '../value_objects/cat_tag.dart';
 
 abstract interface class RemoteRepository {
   FutureResult<Cat, AppFailure> getCat(CatRequest request);
-  FutureResult<Iterable<CatTag>, AppFailure> getTags();
+  FutureResult<CatTags, AppFailure> getTags();
   FutureResult<CatAmount, AppFailure> getCatAmount();
 }

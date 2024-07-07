@@ -2,6 +2,8 @@ import 'package:equatable/equatable.dart';
 
 import 'non_empty_string.dart';
 
+typedef CatTags = Iterable<CatTag>;
+
 final class CatTag extends Equatable {
   const CatTag(this._$1);
 
@@ -15,6 +17,8 @@ final class CatTag extends Equatable {
 
     return null;
   }
+
+  CatTag toLowerCase() => CatTag(_$1.toLowerCase());
 
   String get $1 => _$1.$1;
   NonEmptyString get nonEmpty => _$1;

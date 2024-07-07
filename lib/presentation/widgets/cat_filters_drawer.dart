@@ -2,7 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../../service_locator.dart';
 import '../extensions/build_context_extensions.dart';
-import 'cat_tags_text_field.dart';
+import 'cat_tags_display.dart';
+import 'cat_tags_type_ahead_field.dart';
 
 class CatFiltersDrawer extends StatelessWidget {
   const CatFiltersDrawer({
@@ -20,10 +21,11 @@ class CatFiltersDrawer extends StatelessWidget {
             children: [
               SizedBox(height: context.height * .01),
               const Text(
-                'Cat Filters',
+                'Customize your cat!',
                 style: TextStyle(fontSize: 24),
               ),
-              CatTagsTextField(getTagsUseCase: sl()),
+              CatTagsTypeAheadField(getTagsUseCase: sl()),
+              const CatTagsDisplay(),
             ],
           ),
         ),

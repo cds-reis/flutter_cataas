@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 import '../../domain/entities/cat.dart';
+import '../cubit/cat_filter_cubit/cat_filter_cubit.dart';
 import '../resources/app_colors.dart';
 
 class CatWidget extends StatelessWidget {
@@ -32,6 +34,8 @@ class CatWidget extends StatelessWidget {
                     'Use this cat!',
                     style: TextStyle(fontSize: 16),
                   ),
+                  onPressed: () =>
+                      context.read<CatFilterCubit>().onUseThisCatTap(cat.id),
                 ),
               ),
               NeuIconButton(

@@ -16,7 +16,7 @@ class HomePage extends StatelessWidget {
     return MultiBlocProvider(
       providers: [
         BlocProvider(create: (_) => sl<MainCatCubit>()..onInit(context)),
-        BlocProvider(create: (_) => CatFilterCubit()),
+        BlocProvider(create: (_) => CatFilterCubit(talker: sl())),
       ],
       child: Scaffold(
         appBar: AppBar(
@@ -33,13 +33,7 @@ class HomePage extends StatelessWidget {
             SizedBox(width: context.width * .045),
           ],
         ),
-        body: MultiBlocProvider(
-          providers: [
-            BlocProvider(create: (_) => sl<MainCatCubit>()..onInit(context)),
-            BlocProvider(create: (_) => CatFilterCubit()),
-          ],
-          child: const MainCatPage(),
-        ),
+        body: const MainCatPage(),
         endDrawer: const CatFiltersDrawer(),
       ),
     );

@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:anyhow/base.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
@@ -20,23 +22,19 @@ class MainCatCubit extends Cubit<MainCatState> {
   final GetCatUseCase _getCatUseCase;
 
   Future<void> onInit(BuildContext context) async {
-    final text = _initialText(context);
-
     final request = CatRequest(
       identifier: const NoIdentifier(),
-      text: CatText(text: text),
+      text: CatText(text: _initialText(context)),
     );
 
-    final result = await _getCatUseCase(request);
-    emit(
-      switch (result) {
-        Ok(ok: final cat) => MainCatSucess(cat),
-        Err(err: final failure) => MainCatFailure(failure),
-      },
-    );
+    await _buildRequest(request);
   }
 
   Future<void> onNewCatTap(CatRequest catRequest) async {
+    await _buildRequest(catRequest);
+  }
+
+  Future<void> _buildRequest(CatRequest catRequest) async {
     emit(const MainCatLoading());
     final result = await _getCatUseCase(catRequest);
     emit(

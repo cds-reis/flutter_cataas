@@ -14,6 +14,9 @@ final class NonEmptyString {
     return NonEmptyString._(value);
   }
 
+  NonEmptyString toUpperCase() => NonEmptyString._($1.toUpperCase());
+  NonEmptyString toLowerCase() => NonEmptyString._($1.toLowerCase());
+
   @override
   bool operator ==(Object other) {
     if (identical(this, other)) return true;

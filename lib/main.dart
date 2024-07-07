@@ -6,9 +6,10 @@ import 'package:talker_bloc_logger/talker_bloc_logger.dart';
 import 'presentation/cubit/home_cubit/home_cubit.dart';
 import 'presentation/extensions/build_context_extensions.dart';
 import 'presentation/pages/home_page.dart';
+import 'service_locator.dart';
 
 void main() {
-  Bloc.observer = TalkerBlocObserver();
+  Bloc.observer = TalkerBlocObserver(talker: sl());
   runApp(const MainApp());
 }
 
@@ -21,10 +22,7 @@ class MainApp extends StatelessWidget {
       onGenerateTitle: (context) => context.l10n.title,
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
-      theme: ThemeData(
-        useMaterial3: true,
-        brightness: Brightness.dark,
-      ),
+      theme: ThemeData(useMaterial3: true),
       home: BlocProvider(
         create: (context) => HomeCubit(),
         child: const HomePage(),
