@@ -1,5 +1,4 @@
-import 'package:anyhow/base.dart';
-import 'package:flutter_cataas/domain/failures/app_failure.dart';
+import 'package:anyhow/anyhow.dart';
 import 'package:flutter_cataas/domain/value_objects/positive_int.dart';
 import 'package:glados/glados.dart';
 
@@ -11,8 +10,8 @@ void main() {
     (input) {
       expect(
         PositiveInt.tryParse(input),
-        isA<Ok<PositiveInt, ParseFailure>>()
-            .having((pi) => pi.ok.$1, 'the same internal value', input),
+        isA<Ok<PositiveInt>>()
+            .having((pi) => pi.v.$1, 'the same internal value', input),
       );
     },
   );
@@ -21,7 +20,7 @@ void main() {
     (input) {
       expect(
         PositiveInt.tryParse(input),
-        isA<Err<PositiveInt, ParseFailure>>(),
+        isA<Err<PositiveInt>>(),
       );
     },
   );

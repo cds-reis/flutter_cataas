@@ -1,12 +1,12 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 import '../../domain/entities/cat.dart';
-import '../cubit/cat_filter_cubit/cat_filter_cubit.dart';
+import '../providers/cat_request_provider.dart';
 import '../resources/app_colors.dart';
 
-class CatWidget extends StatelessWidget {
+class CatWidget extends ConsumerWidget {
   const CatWidget({
     required this.cat,
     super.key,
@@ -15,7 +15,7 @@ class CatWidget extends StatelessWidget {
   final Cat cat;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return Column(
       children: [
         Image.memory(
@@ -34,8 +34,11 @@ class CatWidget extends StatelessWidget {
                     'Use this cat!',
                     style: TextStyle(fontSize: 16),
                   ),
-                  onPressed: () =>
-                      context.read<CatFilterCubit>().onUseThisCatTap(cat.id),
+                  onPressed: () {
+                    ref
+                        .read(catIdentifierNotifierProvider.notifier)
+                        .useCatId(cat.id);
+                  },
                 ),
               ),
               NeuIconButton(

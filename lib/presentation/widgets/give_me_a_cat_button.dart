@@ -1,23 +1,19 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
-import '../cubit/cat_filter_cubit/cat_filter_cubit.dart';
-import '../cubit/main_cat_cubit/main_cat_cubit.dart';
 import '../extensions/build_context_extensions.dart';
+import '../providers/main_cat_provider.dart';
 
-class GiveMeACatButton extends StatelessWidget {
-  const GiveMeACatButton({
-    super.key,
-  });
+class GiveMeACatButton extends ConsumerWidget {
+  const GiveMeACatButton({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return NeuTextButton(
       enableAnimation: true,
       onPressed: () {
-        final request = context.read<CatFilterCubit>().state;
-        context.read<MainCatCubit>().onNewCatTap(request);
+        ref.read(mainCatProvider.notifier).getCat();
       },
       text: Text(
         context.l10n.giveMeACat,

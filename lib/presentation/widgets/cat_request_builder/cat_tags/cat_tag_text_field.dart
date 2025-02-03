@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
-import '../../domain/value_objects/cat_tag.dart';
-import '../cubit/cat_filter_cubit/cat_filter_cubit.dart';
+import '../../../../domain/value_objects/cat_tag.dart';
+import '../../../providers/cat_request_provider.dart';
 
-class CatTagTextField extends StatelessWidget {
+class CatTagTextField extends ConsumerWidget {
   const CatTagTextField({
     required this.focusNode,
     required this.controller,
@@ -17,7 +17,7 @@ class CatTagTextField extends StatelessWidget {
   final TextEditingController controller;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     return NeuContainer(
       color: const Color.fromARGB(255, 214, 140, 164),
       borderRadius: BorderRadius.circular(15),
@@ -31,7 +31,9 @@ class CatTagTextField extends StatelessWidget {
               onSubmitted: (value) {
                 final catTag = CatTag.fromString(value);
                 if (catTag != null) {
-                  context.read<CatFilterCubit>().onCatTagSubmitted(catTag);
+                  ref
+                      .read(catIdentifierNotifierProvider.notifier)
+                      .addCatTag(catTag);
                 }
               },
               focusNode: focusNode,

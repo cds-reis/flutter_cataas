@@ -1,17 +1,29 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_hooks/flutter_hooks.dart';
+import 'package:hooks_riverpod/hooks_riverpod.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
-import '../cubit/cat_filter_cubit/cat_filter_cubit.dart';
-import '../cubit/main_cat_cubit/main_cat_cubit.dart';
 import '../extensions/build_context_extensions.dart';
+import '../providers/cat_request_provider.dart';
+import '../providers/main_cat_provider.dart';
 
-class SaySomethingTextField extends StatelessWidget {
+class SaySomethingTextField extends HookConsumerWidget {
   const SaySomethingTextField({super.key});
 
   @override
-  Widget build(BuildContext context) {
-    final cubit = context.read<CatFilterCubit>();
+  Widget build(BuildContext context, WidgetRef ref) {
+    final textController = useTextEditingController();
+    useAutomaticKeepAlive();
+    useEffect(() {
+      textController.addListener(
+        () {
+          ref
+              .read(catTextNotifierProvider.notifier)
+              .onCatTextChange(textController.text);
+        },
+      );
+      return null;
+    });
     return NeuContainer(
       color: const Color.fromARGB(255, 214, 140, 164),
       borderRadius: BorderRadius.circular(15),
@@ -22,10 +34,8 @@ class SaySomethingTextField extends StatelessWidget {
           const SizedBox(width: 13),
           Expanded(
             child: TextField(
-              onSubmitted: (_) {
-                context.read<MainCatCubit>().onNewCatTap(cubit.state);
-              },
-              controller: cubit.catTextController,
+              onSubmitted: (_) => ref.read(mainCatProvider.notifier).getCat(),
+              controller: textController,
               decoration: InputDecoration(
                 hintText: context.l10n.addTextToCatInputHint,
                 border: InputBorder.none,
@@ -34,7 +44,7 @@ class SaySomethingTextField extends StatelessWidget {
             ),
           ),
           IconButton(
-            onPressed: cubit.onCatTextClear,
+            onPressed: textController.clear,
             icon: const Icon(Icons.clear_outlined),
           ),
         ],

@@ -11,13 +11,7 @@ class CatLoader extends StatelessWidget {
       padding: const EdgeInsets.symmetric(vertical: 16),
       child: SpinKitWave(
         itemBuilder: (context, index) {
-          final color = switch (index % 5) {
-            0 => const Color(0xFFED320E),
-            1 => const Color(0xFFB33387),
-            2 => const Color(0xFFFFC901),
-            3 => const Color(0xFFBAFDA2),
-            _ => const Color(0xFFFE91E8),
-          };
+          final color = _getColor(index);
 
           return DecoratedBox(
             decoration: BoxDecoration(
@@ -34,5 +28,15 @@ class CatLoader extends StatelessWidget {
         },
       ),
     );
+  }
+
+  Color _getColor(int index) {
+    return switch (index % 5) {
+      0 => const Color(0xFFED320E),
+      1 => const Color(0xFFB33387),
+      2 => const Color(0xFFFFC901),
+      3 => const Color(0xFFBAFDA2),
+      _ => const Color(0xFFFE91E8),
+    };
   }
 }

@@ -12,8 +12,9 @@ final class CatRequest extends Equatable {
     this.filter,
   });
 
-  static const CatRequest defaultRequest =
-      CatRequest(identifier: NoIdentifier());
+  static const CatRequest defaultRequest = CatRequest(
+    identifier: NoIdentifier(),
+  );
 
   final CatIdentifier identifier;
   final CatText? text;

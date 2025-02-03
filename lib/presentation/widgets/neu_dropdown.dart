@@ -16,13 +16,10 @@ class NeuDropdown extends StatelessWidget {
           border: Border.all(width: neuBorder),
         ),
         child: CustomScrollView(
-          shrinkWrap: true,
-          slivers: <Widget>[
+          slivers: [
             SliverList(
               delegate: SliverChildBuilderDelegate(
-                (context, index) {
-                  return children[index];
-                },
+                (context, index) => children[index],
                 childCount: children.length,
               ),
             ),

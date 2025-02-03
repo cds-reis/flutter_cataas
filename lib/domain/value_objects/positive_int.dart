@@ -1,7 +1,5 @@
-import 'package:anyhow/base.dart';
+import 'package:anyhow/rust.dart';
 import 'package:flutter/material.dart';
-
-import '../failures/app_failure.dart';
 
 @immutable
 final class PositiveInt {
@@ -9,34 +7,28 @@ final class PositiveInt {
 
   final int $1;
 
-  static Result<PositiveInt, ParseFailure> tryParse(
-    int value,
-  ) =>
-      switch (value) {
-        > 0 => Ok(PositiveInt._(value)),
-        _ => const Err(ParseFailure()),
-      };
-
-  @override
-  bool operator ==(Object other) {
-    if (identical(this, other)) return true;
-
-    if (other is int) {
-      return $1 == other;
+  static Option<PositiveInt> tryParse(int value) {
+    switch (value) {
+      case > 0:
+        return Some(PositiveInt._(value));
+      default:
+        return None;
     }
-
-    if (other case PositiveInt(:final $1)) {
-      return this.$1 == $1;
-    }
-
-    return false;
   }
 
   @override
   int get hashCode => $1.hashCode;
 
   @override
-  String toString() {
-    return $1.toString();
+  bool operator ==(Object other) {
+    return switch (other) {
+      _ when identical(this, other) => true,
+      final int other when $1 == other => true,
+      PositiveInt(:final $1) when this.$1 == $1 => true,
+      _ => false,
+    };
   }
+
+  @override
+  String toString() => $1.toString();
 }

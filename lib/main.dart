@@ -1,16 +1,16 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_gen/gen_l10n/app_localizations.dart';
-import 'package:talker_bloc_logger/talker_bloc_logger.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import 'presentation/cubit/home_cubit/home_cubit.dart';
 import 'presentation/extensions/build_context_extensions.dart';
 import 'presentation/pages/home_page.dart';
-import 'service_locator.dart';
 
 void main() {
-  Bloc.observer = TalkerBlocObserver(talker: sl());
-  runApp(const MainApp());
+  runApp(
+    const ProviderScope(
+      child: MainApp(),
+    ),
+  );
 }
 
 class MainApp extends StatelessWidget {
@@ -23,10 +23,7 @@ class MainApp extends StatelessWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       theme: ThemeData(useMaterial3: true),
-      home: BlocProvider(
-        create: (context) => HomeCubit(),
-        child: const HomePage(),
-      ),
+      home: const HomePage(),
     );
   }
 }

@@ -1,4 +1,4 @@
-import 'package:anyhow/base.dart';
+import 'package:anyhow/anyhow.dart';
 import 'package:equatable/equatable.dart';
 
 import '../failures/app_failure.dart';
@@ -11,11 +11,9 @@ final class NonEmptyList<T> extends Equatable {
   const NonEmptyList._({required this.head, required List<T> tail})
       : _tail = tail;
 
-  static Result<NonEmptyList<T>, ParseFailure> fromIterable<T>(
-    Iterable<T> iterable,
-  ) {
+  static Result<NonEmptyList<T>> fromIterable<T>(Iterable<T> iterable) {
     if (iterable.isEmpty) {
-      return const Err(ParseFailure());
+      return bail(ParseFailure(iterable));
     }
 
     return Ok(

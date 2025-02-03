@@ -10,17 +10,21 @@ sealed class CatFilter extends Equatable {
   List<Object?> get props => [];
 }
 
-final class Mono extends CatFilter {}
+final class Mono extends CatFilter {
+  const Mono();
+}
 
-final class Negate extends CatFilter {}
+final class Negate extends CatFilter {
+  const Negate();
+}
 
 final class Custom extends CatFilter {
   const Custom({
-    required this.brightness,
-    required this.lightness,
-    required this.saturation,
-    required this.hue,
-    required this.rgb,
+    this.brightness,
+    this.lightness,
+    this.saturation,
+    this.hue,
+    this.rgb,
   });
 
   final Brightness? brightness;

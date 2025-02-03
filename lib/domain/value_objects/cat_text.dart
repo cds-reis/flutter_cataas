@@ -1,50 +1,48 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter/material.dart';
 
-import 'non_empty_string.dart';
 import 'positive_int.dart';
 
 final class CatText extends Equatable {
   const CatText({
     required this.text,
+    required this.fontColor,
     this.fontSize,
-    this.fontColor,
   });
 
-  final NonEmptyString text;
+  final String text;
+  final FontColor fontColor;
   final FontSize? fontSize;
-  final FontColor? fontColor;
 
   @override
   List<Object?> get props => [text, fontSize, fontColor];
 
   CatText copyWith({
-    NonEmptyString? text,
+    String? text,
+    FontColor? fontColor,
     ValueGetter<FontSize?>? fontSize,
-    ValueGetter<FontColor?>? fontColor,
   }) {
     return CatText(
       text: text ?? this.text,
+      fontColor: fontColor ?? this.fontColor,
       fontSize: fontSize != null ? fontSize() : this.fontSize,
-      fontColor: fontColor != null ? fontColor() : this.fontColor,
     );
   }
 }
 
-final class FontSize extends Equatable {
-  const FontSize(this.$1);
-
-  final PositiveInt $1;
-
-  @override
-  List<Object?> get props => [$1];
+extension type const FontSize(PositiveInt _) implements PositiveInt {
+  static FontSize? fromInt(int value) {
+    return switch (PositiveInt.tryParse(value).toNullable()) {
+      null => null,
+      final positive => FontSize(positive)
+    };
+  }
 }
 
-final class FontColor extends Equatable {
-  const FontColor(this.$1);
+typedef CSSColor = (Color color, String name);
+extension type const FontColor(CSSColor value) {
+  static const FontColor white = FontColor((Colors.white, 'white'));
 
-  final NonEmptyString $1;
-
-  @override
-  List<Object?> get props => [$1];
+  Color get color => value.$1;
+  String get name => value.$2;
 }
