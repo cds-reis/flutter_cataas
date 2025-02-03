@@ -4,7 +4,7 @@ import 'package:icon_decoration/icon_decoration.dart';
 import 'package:neubrutalism_ui/neubrutalism_ui.dart';
 
 import '../../../../domain/value_objects/cat_filter.dart';
-import '../../../providers/cat_request_provider.dart';
+import '../../../providers/cat_filter_providers.dart';
 import '../../../resources/app_colors.dart';
 
 class CatFilterDropdown extends ConsumerWidget {

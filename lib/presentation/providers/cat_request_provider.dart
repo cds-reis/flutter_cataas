@@ -1,13 +1,13 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:riverpod_annotation/riverpod_annotation.dart';
 
-import '../../domain/value_objects/cat_filter.dart';
 import '../../domain/value_objects/cat_identifier.dart';
 import '../../domain/value_objects/cat_request.dart';
 import '../../domain/value_objects/cat_tag.dart';
 import '../../domain/value_objects/cat_text.dart';
 import '../../domain/value_objects/non_empty_list.dart';
 import '../../domain/value_objects/positive_int.dart';
+import 'cat_filter_providers.dart';
 import 'project_providers.dart';
 
 part 'cat_request_provider.g.dart';
@@ -119,16 +119,5 @@ class FontSizeNotifier extends _$FontSizeNotifier {
       null => null,
       final size => FontSize(size)
     };
-  }
-}
-
-@riverpod
-class CatFilterNotifier extends _$CatFilterNotifier {
-  @override
-  CatFilter? build() => null;
-
-  void changeFilter(CatFilter? filter) {
-    ref.read(talkerProvider).info('User submitted new cat filter: $filter');
-    state = filter;
   }
 }

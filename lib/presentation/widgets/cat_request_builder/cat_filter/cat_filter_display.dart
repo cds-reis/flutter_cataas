@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'cat_filter_dropdown.dart';
+import 'custom_filter_display.dart';
 
 class CatFilterDisplay extends ConsumerWidget {
   const CatFilterDisplay({super.key});
@@ -16,6 +17,7 @@ class CatFilterDisplay extends ConsumerWidget {
           style: TextStyle(fontSize: 20),
         ),
         CatFilterDropdown(),
+        CustomFilterDisplay(),
       ],
     );
   }
